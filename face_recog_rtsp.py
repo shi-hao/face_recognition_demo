@@ -3,8 +3,8 @@ import cv2
 import numpy as np
 import os
 
-# This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
-# other example, but it includes some basic performance tweaks to make things run a lot faster:
+# This is a demo of running face recognition on live video from your webcam. It's a little more complicated 
+# than the other example, but it includes some basic performance tweaks to make things run a lot faster:
 #   1. Process each video frame at 1/4 resolution (though still display it at full resolution)
 #   2. Only detect faces in every other frame of video.
 
@@ -13,27 +13,29 @@ import os
 # specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
 
 # rtsp streaming URL
-video_addr = 'rtsp://user:password@192.168.1.100:554/h264/ch33/main/av_stream'
+video_addr = 'rtsp://admin:Pingtai0301@192.168.1.100:554/h264/ch33/main/av_stream'
 
 # Get a reference to webcam #0 (the default one)
-video_capture = cv2.VideoCapture(video_addr)
+video_capture = cv2.VideoCapture(0)
 
-#face directory
-known_face_dir = './known_face/'
-for root, dirs, files in os.walk(known_face_dir, topdown=False):
-    print(dirs)
-    print(files)
+# Known face pictures directory
+#known_face_dir = './known_face/'
+known_face_dir = '/home/bleach/pic/'
+files = os.listdir(known_face_dir)
+print(files)
 
+#for root, dirs, files in os.walk(known_face_dir, topdown=False):
+#    print(dirs)
+#    print(files)
+
+# Loading all the known face pictures
 known_face_encodings = []
 known_face_names = []
-
-# loading all the pictures
-all_vars = locals()
-for var_name in files:
-    print(var_name)
-    all_vars[var_name] = face_recognition.face_encodings(face_recognition.load_image_file(known_face_dir + var_name))[0]
-    known_face_encodings.append(all_vars[var_name])
-    known_face_names.append(var_name)
+face_encodings_handle = locals()
+for file_name in files:
+    face_encodings_handle[file_name] = face_recognition.face_encodings(face_recognition.load_image_file(known_face_dir + file_name))[0]
+    known_face_encodings.append(face_encodings_handle[file_name])
+    known_face_names.append(file_name.rsplit('.', 1)[0])
 
 # Load a sample picture and learn how to recognize it.
 #obama_image = face_recognition.load_image_file(known_face_dir + "/zhzl.jpg")
@@ -58,7 +60,7 @@ face_locations = []
 face_encodings = []
 face_names = []
 
-# process video frame frequency
+# Process video frame frequency
 process_frame_freq = 4
 process_this_frame = process_frame_freq
 
